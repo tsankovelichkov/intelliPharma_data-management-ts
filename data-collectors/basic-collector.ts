@@ -22,7 +22,7 @@ export const basicCollector = async (
 
   if (!sitemap) return;
 
-  for (let index = 0; index < 1; index++) {
+  for (let index = 0; index < sitemap.length; index++) {
     const productLink = sitemap[index].innerHTML;
 
     const existingProductsArr = allProducts.filter(
