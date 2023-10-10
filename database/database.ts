@@ -22,6 +22,12 @@ export const databaseFindByRetailCompany = async (
 };
 
 export const databaseInsert = async (data: ProductData) => {
+  if (
+    Number.isNaN(data.regularPrice) ||
+    Number.isNaN(data.discountPrice) ||
+    Number.isNaN(data.clubCardPrice)
+  )
+    return generalVars.NaN_VALUE;
   const pharmacyProductData = new PharmacyProduct(data);
 
   const response = await pharmacyProductData
@@ -40,6 +46,12 @@ export const databaseUpdate = async (
   productId: any,
   dataForUpdate: ProductDataForUpdate
 ) => {
+  if (
+    Number.isNaN(dataForUpdate.regularPrice) ||
+    Number.isNaN(dataForUpdate.discountPrice) ||
+    Number.isNaN(dataForUpdate.clubCardPrice)
+  )
+    return generalVars.NaN_VALUE;
   const response = await PharmacyProduct.findByIdAndUpdate(
     productId,
     dataForUpdate
