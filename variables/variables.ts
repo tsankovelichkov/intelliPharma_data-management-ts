@@ -12,3 +12,5 @@ export const sopharmacyVars = {
   SITEMAP_URL: "https://sopharmacy.bg/sitemap.xml",
   ROOT_URL: "https://sopharmacy.bg/",
 };
+
+export const allowedRetailCompanies = ["SOPHARMACY"];

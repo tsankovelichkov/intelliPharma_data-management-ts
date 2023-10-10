@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { allowedRetailCompanies } from "../../variables/variables";
 
 const pharmacyProductSchema = new mongoose.Schema({
   productId: {
@@ -25,6 +26,7 @@ const pharmacyProductSchema = new mongoose.Schema({
   },
   retailCompany: {
     type: String,
+    enum: allowedRetailCompanies,
     required: true,
   },
   regularPrice: {
