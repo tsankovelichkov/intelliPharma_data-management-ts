@@ -7,7 +7,7 @@ import { generalVars } from "../variables/variables";
 
 export const basicCollector = async (
   retailCompany: string,
-  fetchSitemapData: () => Promise<HTMLCollection | undefined>,
+  fetchSitemapData: () => Promise<NodeListOf<HTMLElement> | undefined>,
   fetchProductData: (
     productLink: string | undefined,
     terminationTime: number
@@ -23,6 +23,7 @@ export const basicCollector = async (
   if (!sitemap) return;
 
   for (let index = 0; index < sitemap.length; index++) {
+    console.log(index);
     const productLink = sitemap[index].innerHTML;
 
     const existingProductsArr = allProducts.filter(
@@ -56,8 +57,6 @@ export const basicCollector = async (
 
       if (response) console.log(response);
     }
-
-    console.log(index);
   }
 
   console.log(generalVars.COLLECT_DATA_END);

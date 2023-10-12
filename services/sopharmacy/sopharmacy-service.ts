@@ -4,7 +4,7 @@ import { fetchProductData } from "../general/general-service";
 const { JSDOM } = jsdom;
 
 export const fetchSopharmacySitemapData = async (): Promise<
-  HTMLCollection | undefined
+  NodeListOf<HTMLElement> | undefined
 > => {
   const sitemapURL = await fetch(sopharmacyVars.SITEMAP_URL)
     .then((res) => res.text())
@@ -24,18 +24,14 @@ export const fetchSopharmacySitemapData = async (): Promise<
     .then((res) => {
       const dom = new JSDOM(res);
 
-      if (!dom.window.document.querySelector("urlset")) return;
+      if (!dom.window.document.querySelector("loc")) return;
 
-      const htmlEl = dom.window.document.querySelector("urlset") as HTMLElement;
-      return htmlEl.innerHTML;
+      return dom.window.document.querySelectorAll(
+        "loc"
+      ) as NodeListOf<HTMLElement>;
     });
 
-  const sitemapDom = new JSDOM(sitemap);
-
-  const sitemapProducts =
-    sitemapDom.window.document.getElementsByTagName("loc");
-
-  return sitemapProducts;
+  return sitemap;
 };
 
 export const fetchSopharmacyProductData = async (
@@ -44,7 +40,7 @@ export const fetchSopharmacyProductData = async (
 ): Promise<string | undefined> => {
   if (!productLink) return;
   // eslint-disable-next-line no-constant-condition
-  const urlFetch = fetch(productLink)
+  const fetchExpression = fetch(productLink)
     .then((res) => res.text())
     .then((res) => {
       const dom = new JSDOM(res);
@@ -58,5 +54,5 @@ export const fetchSopharmacyProductData = async (
       return htmlEl.innerHTML;
     });
 
-  return await fetchProductData(urlFetch, terminationTime);
+  return await fetchProductData(fetchExpression, terminationTime);
 };

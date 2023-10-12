@@ -7,7 +7,7 @@ import {
 } from "../../interfaces/interfaces";
 
 export const fetchProductData = async (
-  urlFetch: Promise<string | undefined>,
+  fetchExpression: Promise<string | undefined>,
   terminationTime: number
 ) => {
   const enterenceTime = new Date().getTime();
@@ -15,7 +15,7 @@ export const fetchProductData = async (
   // eslint-disable-next-line no-constant-condition
   while (true) {
     try {
-      const response = await urlFetch;
+      const response = await fetchExpression;
 
       return response;
     } catch (error) {
