@@ -2,15 +2,14 @@
 import { databaseFindByRetailCompany } from "../database/database";
 import { ExtractedProductData, ProductData } from "../interfaces/interfaces";
 import { addProduct, updateProduct } from "../services/general/general-service";
-import { getDataForUpdate } from "../utils/general/general-util";
+import { getDataForUpdate, log } from "../utils/general/general-util";
 import { generalVars } from "../variables/variables";
 
 export const basicCollector = async (
   retailCompany: string,
   fetchSitemapData: () => Promise<NodeListOf<HTMLElement> | undefined>,
   fetchProductData: (
-    productLink: string | undefined,
-    terminationTime: number
+    productLink: string | undefined
   ) => Promise<string | undefined>,
   extractProductInfo: (
     stringHTML: string | undefined
@@ -20,10 +19,10 @@ export const basicCollector = async (
 
   const sitemap = await fetchSitemapData();
 
-  if (!sitemap) return;
+  if (!sitemap || !allProducts) return;
 
   for (let index = 0; index < sitemap.length; index++) {
-    console.log(index);
+    log(index);
     const productLink = sitemap[index].innerHTML;
 
     const existingProductsArr = allProducts.filter(
@@ -32,7 +31,7 @@ export const basicCollector = async (
 
     const isProductAdded = existingProductsArr.length;
 
-    const stringHTML = await fetchProductData(productLink, 1300000);
+    const stringHTML = await fetchProductData(productLink);
 
     const extractedData = extractProductInfo(stringHTML);
 
@@ -46,7 +45,7 @@ export const basicCollector = async (
 
     if (!isProductAdded) {
       const response = await addProduct(newProductData);
-      console.log(response);
+      log(response);
     } else {
       const dataForUpdate = getDataForUpdate(
         existingProductsArr,
@@ -55,10 +54,10 @@ export const basicCollector = async (
 
       const response = await updateProduct(existingProductsArr, dataForUpdate);
 
-      if (response) console.log(response);
+      if (response) log(response);
     }
   }
 
-  console.log(generalVars.COLLECT_DATA_END);
+  log(generalVars.COLLECT_DATA_END);
   return;
 };

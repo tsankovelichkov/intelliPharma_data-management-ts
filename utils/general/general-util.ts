@@ -29,3 +29,16 @@ export const getDataForUpdate = (
 
   return updateData;
 };
+
+export const log = (text: string | number | undefined): void => {
+  // eslint-disable-next-line no-console
+  console.log(text);
+};
+
+export const throwError = (text: string, errorMsg?: any) => {
+  // eslint-disable-next-line no-console
+  if (text && !errorMsg) throw console.error(text);
+
+  // eslint-disable-next-line no-console
+  throw console.error(text, errorMsg);
+};

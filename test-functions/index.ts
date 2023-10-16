@@ -1,8 +1,11 @@
+import { log } from "console";
 import { databaseFindByRetailCompany } from "../database/database";
 
-export const collectorDuplicateIdsChecker = async (retailCompany: string) => {
+const duplicateIdsChecker = async (retailCompany: string) => {
   const allProducts = await databaseFindByRetailCompany(retailCompany);
   const duplicateIdsArr: string[] = [];
+
+  if (!allProducts) return;
 
   for (let index = 0; index < allProducts.length; index++) {
     const targetId = allProducts[index].productId;
@@ -16,4 +19,32 @@ export const collectorDuplicateIdsChecker = async (retailCompany: string) => {
   }
 
   return duplicateIdsArr;
+};
+
+const duplicateTitlesChecker = async (retailCompany: string) => {
+  const allProducts = await databaseFindByRetailCompany(retailCompany);
+  const duplicateIdsArr: string[] = [];
+
+  if (!allProducts) return;
+
+  for (let index = 0; index < allProducts.length; index++) {
+    const targetTitle = allProducts[index].title;
+
+    const filteredArr = allProducts.filter(
+      (product) => product.productId === targetTitle
+    );
+
+    if (filteredArr.length > 1 && !duplicateIdsArr.includes(targetTitle))
+      duplicateIdsArr.push(targetTitle);
+  }
+
+  return duplicateIdsArr;
+};
+
+export const findDuplication = async (retailCompany: string) => {
+  const duplicateIds = await duplicateIdsChecker(retailCompany);
+  const duplicateTitles = await duplicateTitlesChecker(retailCompany);
+
+  log(duplicateIds);
+  log(duplicateTitles);
 };

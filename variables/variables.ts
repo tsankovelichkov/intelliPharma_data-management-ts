@@ -7,6 +7,7 @@ export const generalVars = {
   DB_CONNECT: "connect to db",
   COLLECT_DATA_END: "END OF COLLECTING DATA",
   NaN_VALUE: "NaN value",
+  STANDARD_TERMINATION_TIME: 900000,
 };
 
 export const sopharmacyVars = {
