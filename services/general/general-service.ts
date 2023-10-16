@@ -5,33 +5,43 @@ import {
   ProductData,
   ProductDataForUpdate,
 } from "../../interfaces/interfaces";
+import { throwError } from "../../utils/general/general-util";
 
-export const fetchProductData = async (
-  fetchExpression: Promise<string | undefined>,
-  terminationTime: number
+export const stableConnectionFetch = async (
+  fetchFunc: () => Promise<any>,
+  terminationTime: number,
+  errorStr: string
 ) => {
   const enterenceTime = new Date().getTime();
 
   // eslint-disable-next-line no-constant-condition
   while (true) {
     try {
-      const response = await fetchExpression;
+      const response = await fetchFunc();
 
       return response;
     } catch (error) {
       const timeAtTheMoment = new Date().getTime();
 
+      //TO-DO: if statement for LAN error
+
       if (timeAtTheMoment - enterenceTime > terminationTime)
-        throw new Error("Unresolvable LAN issue.");
+        throwError(errorStr, error);
 
       await new Promise((resolve) => setTimeout(resolve, 2000));
     }
   }
 };
 
-export const addProduct = async (data: ProductData) => {
-  const response = await databaseInsert(data);
-  return response;
+export const addProduct = async (
+  data: ProductData
+): Promise<string | undefined> => {
+  try {
+    const response = await databaseInsert(data);
+    return response;
+  } catch (error) {
+    throwError("Failed to add product in database.", error);
+  }
 };
 
 export const updateProduct = async (
@@ -50,7 +60,11 @@ export const updateProduct = async (
 
   if (!dataForUpdateExists) return;
 
-  const response = await databaseUpdate(productId, dataForUpdate);
+  try {
+    const response = await databaseUpdate(productId, dataForUpdate);
 
-  return response;
+    return response;
+  } catch (error) {
+    throwError("Failed to update product in database.", error);
+  }
 };
