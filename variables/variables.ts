@@ -22,4 +22,9 @@ export const epharmaVars = {
   ROOT_URL: "https://epharma.bg",
 };
 
-export const allowedRetailCompanies = ["SOPHARMACY", "EPHARMA"];
+export const medeaVars = {
+  NAME: "MEDEA",
+  SITEMAP_URL: "https://aptekamedea.bg/sitemaps/bg/sitemap_products_bg.xml",
+};
+
+export const allowedRetailCompanies = ["SOPHARMACY", "EPHARMA", "MEDEA"];
