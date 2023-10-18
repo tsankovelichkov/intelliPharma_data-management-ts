@@ -2,7 +2,7 @@
 import { ExtractedProductData, Prices } from "../../interfaces/interfaces";
 
 import jsdom from "jsdom";
-import { epharmaVars, generalVars } from "../../variables/variables";
+import { generalVars, pharmacyVars } from "../../variables/variables";
 const { JSDOM } = jsdom;
 
 const getProductPrices = (productDataDom: any): Prices => {
@@ -73,7 +73,7 @@ export const extractEpharmaProductInfo = (
     image = productDataDom.window.document
       .getElementsByTagName("img")[0]
       .getAttribute("src")
-      .replace(".", epharmaVars.ROOT_URL);
+      .replace(".", pharmacyVars.EPHARMA.ROOT_URL);
 
   if (
     productDataDom.window.document.querySelector(".choose-name")

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ExtractedProductData, Prices } from "../../interfaces/interfaces";
-import { generalVars, sopharmacyVars } from "../../variables/variables";
+import { generalVars, pharmacyVars } from "../../variables/variables";
 
 import jsdom from "jsdom";
 const { JSDOM } = jsdom;
@@ -64,7 +64,7 @@ const getProductImage = (productDataDom: any): string => {
 
   if (productDataDom.window.document.querySelector(".product__img")) {
     image =
-      sopharmacyVars.ROOT_URL +
+      pharmacyVars.SOPHARMACY.ROOT_URL +
       productDataDom.window.document
         .querySelector(".product__img")
         .getAttribute("data-srcset");

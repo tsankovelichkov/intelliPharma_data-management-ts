@@ -1,15 +1,18 @@
-import { generalVars, sopharmacyVars } from "../../variables/variables";
+import { generalVars } from "../../variables/variables";
 import jsdom from "jsdom";
-import { stableConnectionFetch } from "../general/general-service";
+import {
+  defaultProductFetch,
+  stableConnectionFetch,
+} from "../general/general-service";
 import { throwError } from "../../utils/general/general-util";
 const { JSDOM } = jsdom;
 
-export const fetchSopharmacySitemapData = async (): Promise<
-  NodeListOf<HTMLElement> | undefined
-> => {
+export const fetchSopharmacySitemapData = async (
+  url: string
+): Promise<NodeListOf<HTMLElement> | undefined> => {
   try {
     const fetchFunc = async () => {
-      const sitemapURL = await fetch(sopharmacyVars.SITEMAP_URL)
+      const sitemapURL = await fetch(url)
         .then((res) => res.text())
         .then((res) => {
           const dom = new JSDOM(res);
@@ -57,28 +60,16 @@ export const fetchSopharmacyProductData = async (
   if (!productLink) return;
   // eslint-disable-next-line no-constant-condition
   try {
-    const fetchFunc = async () => {
-      const fetchExpression = await fetch(productLink)
-        .then((res) => res.text())
-        .then((res) => {
-          const dom = new JSDOM(res);
-
-          if (!dom.window.document.querySelector(".product__preview")) return;
-
-          const htmlEl = dom.window.document.querySelector(
-            ".product__preview"
-          ) as HTMLElement;
-
-          return htmlEl.innerHTML;
-        });
-
-      return fetchExpression;
+    const fetchData = {
+      targetClass: ".product__preview",
+      productLink,
     };
 
     const response = await stableConnectionFetch(
-      fetchFunc,
+      defaultProductFetch,
       generalVars.STANDARD_TERMINATION_TIME,
-      "Failed to load product data."
+      "Failed to load product data.",
+      fetchData
     );
 
     return response;

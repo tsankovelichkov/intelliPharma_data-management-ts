@@ -1,14 +1,12 @@
 import { basicCollector } from "../data-collectors/basic-collector";
-import {
-  fetchEpharmaProductData,
-  fetchEpharmaSitemapData,
-} from "../services/epharma/epharma-service";
+import { fetchEpharmaProductData } from "../services/epharma/epharma-service";
+import { fetchDefaultSitemap } from "../services/general/general-service";
 import { extractEpharmaProductInfo } from "../utils/epharma/epharma-util";
-import { epharmaVars } from "../variables/variables";
+import { pharmacyVars } from "../variables/variables";
 
 basicCollector(
-  epharmaVars.NAME,
-  fetchEpharmaSitemapData,
+  pharmacyVars.EPHARMA.NAME,
+  fetchDefaultSitemap,
   fetchEpharmaProductData,
   extractEpharmaProductInfo
 );

@@ -7,17 +7,27 @@ import {
 } from "../../interfaces/interfaces";
 import { throwError } from "../../utils/general/general-util";
 
+import jsdom from "jsdom";
+import { generalVars } from "../../variables/variables";
+const { JSDOM } = jsdom;
+
 export const stableConnectionFetch = async (
-  fetchFunc: () => Promise<any>,
+  fetchFunc: (targetClass?: string, productLink?: string) => Promise<any>,
   terminationTime: number,
-  errorStr: string
+  errorStr: string,
+  fetchData?: {
+    targetClass: string;
+    productLink: string;
+  }
 ) => {
   const enterenceTime = new Date().getTime();
 
   // eslint-disable-next-line no-constant-condition
   while (true) {
     try {
-      const response = await fetchFunc();
+      const response = fetchData
+        ? await fetchFunc(fetchData.targetClass, fetchData.productLink)
+        : await fetchFunc();
 
       return response;
     } catch (error) {
@@ -30,6 +40,60 @@ export const stableConnectionFetch = async (
 
       await new Promise((resolve) => setTimeout(resolve, 2000));
     }
+  }
+};
+
+export const defaultProductFetch = async (
+  targetClass?: string,
+  productLink?: string
+) => {
+  if (!targetClass || !productLink) return;
+  const fetchExpression = await fetch(productLink)
+    .then((res) => res.text())
+    .then((res) => {
+      const dom = new JSDOM(res);
+
+      if (!dom.window.document.querySelector(targetClass)) return;
+
+      const htmlEl = dom.window.document.querySelector(
+        targetClass
+      ) as HTMLElement;
+
+      return htmlEl.innerHTML;
+    });
+
+  return fetchExpression;
+};
+
+export const fetchDefaultSitemap = async (
+  url: string
+): Promise<NodeListOf<HTMLElement> | undefined> => {
+  try {
+    const fetchFunc = async () => {
+      const sitemap = await fetch(url)
+        .then((res) => res.text())
+        .then((res) => {
+          const dom = new JSDOM(res);
+
+          if (!dom.window.document.querySelector("loc")) return;
+
+          return dom.window.document.querySelectorAll(
+            "loc"
+          ) as NodeListOf<HTMLElement>;
+        });
+
+      return sitemap;
+    };
+
+    const response = await stableConnectionFetch(
+      fetchFunc,
+      generalVars.STANDARD_TERMINATION_TIME,
+      "Failed to load sitemap."
+    );
+
+    return response;
+  } catch (error) {
+    throwError("Failed to load sitemap.", error);
   }
 };
 

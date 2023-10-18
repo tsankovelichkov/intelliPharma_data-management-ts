@@ -23,7 +23,7 @@ const duplicateIdsChecker = async (retailCompany: string) => {
 
 const duplicateTitlesChecker = async (retailCompany: string) => {
   const allProducts = await databaseFindByRetailCompany(retailCompany);
-  const duplicateIdsArr: string[] = [];
+  const duplicateTitlesArr: string[] = [];
 
   if (!allProducts) return;
 
@@ -34,11 +34,11 @@ const duplicateTitlesChecker = async (retailCompany: string) => {
       (product) => product.productId === targetTitle
     );
 
-    if (filteredArr.length > 1 && !duplicateIdsArr.includes(targetTitle))
-      duplicateIdsArr.push(targetTitle);
+    if (filteredArr.length > 1 && !duplicateTitlesArr.includes(targetTitle))
+      duplicateTitlesArr.push(targetTitle);
   }
 
-  return duplicateIdsArr;
+  return duplicateTitlesArr;
 };
 
 export const findDuplication = async (retailCompany: string) => {
@@ -48,3 +48,5 @@ export const findDuplication = async (retailCompany: string) => {
   log(duplicateIds);
   log(duplicateTitles);
 };
+
+findDuplication("SOPHARMACY");

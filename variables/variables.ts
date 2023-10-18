@@ -1,3 +1,5 @@
+import { PharmacyVars } from "../interfaces/interfaces";
+
 export const generalVars = {
   MISSING_IMAGE: "IMAGE IS MISSING",
   MISSING_ID: "MISSING ID",
@@ -10,21 +12,21 @@ export const generalVars = {
   STANDARD_TERMINATION_TIME: 900000,
 };
 
-export const sopharmacyVars = {
-  NAME: "SOPHARMACY",
-  SITEMAP_URL: "https://sopharmacy.bg/sitemap.xml",
-  ROOT_URL: "https://sopharmacy.bg/",
-};
-
-export const epharmaVars = {
-  NAME: "EPHARMA",
-  SITEMAP_URL: "https://epharma.bg/sitemap.xml",
-  ROOT_URL: "https://epharma.bg",
-};
-
-export const medeaVars = {
-  NAME: "MEDEA",
-  SITEMAP_URL: "https://aptekamedea.bg/sitemaps/bg/sitemap_products_bg.xml",
-};
+export const pharmacyVars: PharmacyVars = {
+  SOPHARMACY: {
+    NAME: "SOPHARMACY",
+    SITEMAP_URL: "https://sopharmacy.bg/sitemap.xml",
+    ROOT_URL: "https://sopharmacy.bg/",
+  },
+  MEDEA: {
+    NAME: "MEDEA",
+    SITEMAP_URL: "https://aptekamedea.bg/sitemaps/bg/sitemap_products_bg.xml",
+  },
+  EPHARMA: {
+    NAME: "EPHARMA",
+    SITEMAP_URL: "https://epharma.bg/sitemap.xml",
+    ROOT_URL: "https://epharma.bg",
+  },
+} as PharmacyVars;
 
 export const allowedRetailCompanies = ["SOPHARMACY", "EPHARMA", "MEDEA"];

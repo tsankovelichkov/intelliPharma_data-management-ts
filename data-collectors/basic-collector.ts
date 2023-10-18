@@ -1,13 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { databaseFindByRetailCompany } from "../database/database";
-import { ExtractedProductData, ProductData } from "../interfaces/interfaces";
+import {
+  ExtractedProductData,
+  Pharmacies,
+  ProductData,
+} from "../interfaces/interfaces";
 import { addProduct, updateProduct } from "../services/general/general-service";
 import { getDataForUpdate, log } from "../utils/general/general-util";
-import { generalVars } from "../variables/variables";
+import { generalVars, pharmacyVars } from "../variables/variables";
 
 export const basicCollector = async (
-  retailCompany: string,
-  fetchSitemapData: () => Promise<NodeListOf<HTMLElement> | undefined>,
+  retailCompany: Pharmacies,
+  fetchSitemapData: (
+    url: string
+  ) => Promise<NodeListOf<HTMLElement> | undefined>,
   fetchProductData: (
     productLink: string | undefined
   ) => Promise<string | undefined>,
@@ -17,7 +23,9 @@ export const basicCollector = async (
 ) => {
   const allProducts = await databaseFindByRetailCompany(retailCompany);
 
-  const sitemap = await fetchSitemapData();
+  const sitemap = await fetchSitemapData(
+    pharmacyVars[retailCompany].SITEMAP_URL
+  );
 
   if (!sitemap || !allProducts) return;
 

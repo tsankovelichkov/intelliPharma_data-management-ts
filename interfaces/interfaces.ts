@@ -10,7 +10,7 @@ export interface ProductDataForUpdate {
   image?: string;
   title?: string;
   manufacturer?: string;
-  retailCompany?: string;
+  retailCompany?: Pharmacies;
   regularPrice?: number;
   discountPrice?: number;
   clubCardPrice?: number;
@@ -32,11 +32,25 @@ export interface ProductData {
   image: string;
   title: string;
   manufacturer: string;
-  retailCompany: string;
+  retailCompany: Pharmacies;
   regularPrice: number;
   discountPrice: number;
   clubCardPrice: number;
   link: string;
+}
+
+export type Pharmacies = "EPHARMA" | "SOPHARMACY" | "MEDEA";
+
+export interface DefaultVarData {
+  NAME: Pharmacies;
+  SITEMAP_URL: string;
+  ROOT_URL?: string;
+}
+
+export interface PharmacyVars {
+  SOPHARMACY: DefaultVarData;
+  EPHARMA: DefaultVarData;
+  MEDEA: DefaultVarData;
 }
 
 export interface ExistingProductData extends ProductData {
