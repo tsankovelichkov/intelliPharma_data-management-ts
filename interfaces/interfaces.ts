@@ -44,6 +44,7 @@ export type Pharmacies = "EPHARMA" | "SOPHARMACY" | "MEDEA";
 export interface DefaultVarData {
   NAME: Pharmacies;
   SITEMAP_URL: string;
+  TARGET_CLASS: string;
   ROOT_URL?: string;
 }
 

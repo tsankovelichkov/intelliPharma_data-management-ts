@@ -15,13 +15,12 @@ export const basicCollector = async (
     url: string
   ) => Promise<NodeListOf<HTMLElement> | undefined>,
   fetchProductData: (
-    productLink: string,
+    productLink: string | undefined,
     targetClass: string
   ) => Promise<string | undefined>,
   extractProductInfo: (
     stringHTML: string | undefined
-  ) => ExtractedProductData | undefined,
-  targetClass: string
+  ) => ExtractedProductData | undefined
 ) => {
   const allProducts = await databaseFindByRetailCompany(retailCompany);
 
@@ -41,7 +40,10 @@ export const basicCollector = async (
 
     const isProductAdded = existingProductsArr.length;
 
-    const stringHTML = await fetchProductData(productLink, targetClass);
+    const stringHTML = await fetchProductData(
+      productLink,
+      pharmacyVars[retailCompany].TARGET_CLASS
+    );
 
     const extractedData = extractProductInfo(stringHTML);
 

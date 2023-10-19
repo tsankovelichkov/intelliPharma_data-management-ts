@@ -10,6 +10,5 @@ basicCollector(
   pharmacyVars.MEDEA.NAME,
   fetchDefaultSitemap,
   fetchDefaultProduct,
-  extractMedeaProductInfo,
-  ".productView"
+  extractMedeaProductInfo
 );

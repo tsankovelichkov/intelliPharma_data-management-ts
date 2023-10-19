@@ -8,6 +8,5 @@ basicCollector(
   pharmacyVars.EPHARMA.NAME,
   fetchDefaultSitemap,
   fetchEpharmaProductData,
-  extractEpharmaProductInfo,
-  ".jq-product-details"
+  extractEpharmaProductInfo
 );

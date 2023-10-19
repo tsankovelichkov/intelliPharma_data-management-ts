@@ -38,9 +38,10 @@ export const stableConnectionFetch = async (
 };
 
 export const fetchDefaultProduct = async (
-  productLink: string,
+  productLink: string | undefined,
   targetClass: string
 ) => {
+  if (!productLink) return;
   try {
     const fetchFunc = async () => {
       const fetchExpression = await fetch(productLink)

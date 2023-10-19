@@ -8,6 +8,5 @@ basicCollector(
   pharmacyVars.SOPHARMACY.NAME,
   fetchSopharmacySitemapData,
   fetchDefaultProduct,
-  extractSopharmacyProductInfo,
-  ".product__preview"
+  extractSopharmacyProductInfo
 );
