@@ -14,20 +14,14 @@ const { JSDOM } = jsdom;
 export const stableConnectionFetch = async (
   fetchFunc: (targetClass?: string, productLink?: string) => Promise<any>,
   terminationTime: number,
-  errorStr: string,
-  fetchData?: {
-    targetClass: string;
-    productLink: string;
-  }
+  errorStr: string
 ) => {
   const enterenceTime = new Date().getTime();
 
   // eslint-disable-next-line no-constant-condition
   while (true) {
     try {
-      const response = fetchData
-        ? await fetchFunc(fetchData.targetClass, fetchData.productLink)
-        : await fetchFunc();
+      const response = await fetchFunc();
 
       return response;
     } catch (error) {
@@ -43,26 +37,39 @@ export const stableConnectionFetch = async (
   }
 };
 
-export const defaultProductFetch = async (
-  targetClass?: string,
-  productLink?: string
+export const fetchDefaultProduct = async (
+  productLink: string,
+  targetClass: string
 ) => {
-  if (!targetClass || !productLink) return;
-  const fetchExpression = await fetch(productLink)
-    .then((res) => res.text())
-    .then((res) => {
-      const dom = new JSDOM(res);
+  try {
+    const fetchFunc = async () => {
+      const fetchExpression = await fetch(productLink)
+        .then((res) => res.text())
+        .then((res) => {
+          const dom = new JSDOM(res);
 
-      if (!dom.window.document.querySelector(targetClass)) return;
+          if (!dom.window.document.querySelector(targetClass)) return;
 
-      const htmlEl = dom.window.document.querySelector(
-        targetClass
-      ) as HTMLElement;
+          const htmlEl = dom.window.document.querySelector(
+            targetClass
+          ) as HTMLElement;
 
-      return htmlEl.innerHTML;
-    });
+          return htmlEl.innerHTML;
+        });
 
-  return fetchExpression;
+      return fetchExpression;
+    };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const response = await stableConnectionFetch(
+      fetchFunc,
+      generalVars.STANDARD_TERMINATION_TIME,
+      "Failed to load product data."
+    );
+
+    return response;
+  } catch (error) {
+    throwError("Failed to load product data.", error);
+  }
 };
 
 export const fetchDefaultSitemap = async (

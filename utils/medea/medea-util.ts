@@ -51,7 +51,11 @@ const getProductManufacturer = (productDataDom: any): string => {
       manufacturer =
         productDataDom.window.document.querySelector(".shortDesc")
           .firstElementChild.innerHTML;
-  } else {
+
+    return manufacturer;
+  }
+
+  if (productDataDom.window.document.querySelector(".productBrand")) {
     manufacturer = productDataDom.window.document
       .querySelector(".productBrand")
       .firstElementChild.getAttribute("alt")
@@ -61,6 +65,8 @@ const getProductManufacturer = (productDataDom: any): string => {
       manufacturer = productDataDom.window.document
         .querySelector(".productBrand")
         .firstElementChild.getAttribute("alt");
+
+    return manufacturer;
   }
 
   return manufacturer;

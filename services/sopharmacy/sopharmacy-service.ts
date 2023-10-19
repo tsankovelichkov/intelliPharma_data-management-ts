@@ -1,9 +1,6 @@
 import { generalVars } from "../../variables/variables";
 import jsdom from "jsdom";
-import {
-  defaultProductFetch,
-  stableConnectionFetch,
-} from "../general/general-service";
+import { stableConnectionFetch } from "../general/general-service";
 import { throwError } from "../../utils/general/general-util";
 const { JSDOM } = jsdom;
 
@@ -51,29 +48,5 @@ export const fetchSopharmacySitemapData = async (
     return response;
   } catch (error) {
     throwError("Failed to load sitemap.", error);
-  }
-};
-
-export const fetchSopharmacyProductData = async (
-  productLink: string | undefined
-): Promise<string | undefined> => {
-  if (!productLink) return;
-  // eslint-disable-next-line no-constant-condition
-  try {
-    const fetchData = {
-      targetClass: ".product__preview",
-      productLink,
-    };
-
-    const response = await stableConnectionFetch(
-      defaultProductFetch,
-      generalVars.STANDARD_TERMINATION_TIME,
-      "Failed to load product data.",
-      fetchData
-    );
-
-    return response;
-  } catch (error) {
-    throwError("Failed to load product data.", error);
   }
 };

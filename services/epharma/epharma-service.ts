@@ -4,7 +4,8 @@ import { stableConnectionFetch } from "../general/general-service";
 import { throwError } from "../../utils/general/general-util";
 
 export const fetchEpharmaProductData = async (
-  productLink: string | undefined
+  productLink: string | undefined,
+  targetClass: string
 ): Promise<string | undefined> => {
   if (!productLink || !productLink.includes("-1-")) return;
   const nightmare = new Nightmare();
@@ -15,10 +16,8 @@ export const fetchEpharmaProductData = async (
       const fetchExpression: any = await nightmare
         .goto(productLink)
         .evaluate(() => {
-          if (!document.querySelector(".jq-product-details")) return;
-          const htmlEl = document.querySelector(
-            ".jq-product-details"
-          ) as HTMLElement;
+          if (!document.querySelector(targetClass)) return;
+          const htmlEl = document.querySelector(targetClass) as HTMLElement;
           return htmlEl.innerHTML;
         });
 
