@@ -48,5 +48,3 @@ export const findDuplication = async (retailCompany: string) => {
   log(duplicateIds);
   log(duplicateTitles);
 };
-
-findDuplication("SOPHARMACY");

@@ -30,6 +30,17 @@ export const pharmacyVars: PharmacyVars = {
     ROOT_URL: "https://epharma.bg",
     TARGET_CLASS: ".jq-product-details",
   },
+  AFYA: {
+    NAME: "AFYA",
+    SITEMAP_URL: "https://www.afya-pharmacy.bg/sitemap.xml",
+    ROOT_URL: "https://www.afya-pharmacy.bg",
+    TARGET_CLASS: ".singleProduct",
+  },
 } as PharmacyVars;
 
-export const allowedRetailCompanies = ["SOPHARMACY", "EPHARMA", "MEDEA"];
+export const allowedRetailCompanies = [
+  "SOPHARMACY",
+  "EPHARMA",
+  "MEDEA",
+  "AFYA",
+];

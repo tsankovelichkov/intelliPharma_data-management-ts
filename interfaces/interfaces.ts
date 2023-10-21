@@ -39,7 +39,7 @@ export interface ProductData {
   link: string;
 }
 
-export type Pharmacies = "EPHARMA" | "SOPHARMACY" | "MEDEA";
+export type Pharmacies = "EPHARMA" | "SOPHARMACY" | "MEDEA" | "AFYA";
 
 export interface DefaultVarData {
   NAME: Pharmacies;
@@ -52,6 +52,7 @@ export interface PharmacyVars {
   SOPHARMACY: DefaultVarData;
   EPHARMA: DefaultVarData;
   MEDEA: DefaultVarData;
+  AFYA: DefaultVarData;
 }
 
 export interface ExistingProductData extends ProductData {
