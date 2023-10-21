@@ -1,6 +1,5 @@
 import { ExtractedProductData, Prices } from "../../interfaces/interfaces";
 import { generalVars, pharmacyVars } from "../../variables/variables";
-import { throwError } from "../general/general-util";
 
 import jsdom from "jsdom";
 const { JSDOM } = jsdom;
@@ -10,28 +9,24 @@ const getProductPrices = (productDataDom: any): Prices => {
   let regularPrice = 0;
   let discountPrice = 0;
 
-  if (productDataDom.window.document.querySelector(".currPrice")) {
-    if (productDataDom.window.document.querySelector(".oldPrice")) {
-      regularPrice = Number(
-        productDataDom.window.document
-          .querySelector(".oldPrice")
-          .innerHTML.split("<")[0]
-      );
-      discountPrice = Number(
-        productDataDom.window.document
-          .querySelector(".currPrice")
-          .innerHTML.split("<")[0]
-      );
-    } else {
-      regularPrice = Number(
-        productDataDom.window.document
-          .querySelector(".currPrice")
-          .innerHTML.split("<")[0]
-      );
-      discountPrice = 0;
-    }
+  if (productDataDom.window.document.querySelector(".oldPrice")) {
+    regularPrice = Number(
+      productDataDom.window.document
+        .querySelector(".oldPrice")
+        .innerHTML.split("<")[0]
+    );
+    discountPrice = Number(
+      productDataDom.window.document
+        .querySelector(".currPrice")
+        .innerHTML.split("<")[0]
+    );
   } else {
-    throw throwError("unavailable prices");
+    regularPrice = Number(
+      productDataDom.window.document
+        .querySelector(".currPrice")
+        .innerHTML.split("<")[0]
+    );
+    discountPrice = 0;
   }
 
   return {

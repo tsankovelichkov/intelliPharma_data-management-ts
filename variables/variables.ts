@@ -36,6 +36,11 @@ export const pharmacyVars: PharmacyVars = {
     ROOT_URL: "https://www.afya-pharmacy.bg",
     TARGET_CLASS: ".singleProduct",
   },
+  BENU: {
+    NAME: "BENU",
+    SITEMAP_URL: "https://www.benu.bg/sitemap_product_001.xml",
+    TARGET_CLASS: "#product-detail",
+  },
 } as PharmacyVars;
 
 export const allowedRetailCompanies = [
@@ -43,4 +48,5 @@ export const allowedRetailCompanies = [
   "EPHARMA",
   "MEDEA",
   "AFYA",
+  "BENU",
 ];
