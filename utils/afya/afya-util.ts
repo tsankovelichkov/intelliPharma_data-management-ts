@@ -50,6 +50,8 @@ export const extractAfyaProductInfo = (
 
   if (!productDataDom) return;
 
+  if (!productDataDom.window.document.querySelector(".currPrice")) return;
+
   const productId = productDataDom.window.document
     .querySelector(".barcode")
     .innerHTML.replace("арт. № ", "")
