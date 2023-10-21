@@ -78,9 +78,11 @@ export const extractAfyaProductInfo = (
     productDataDom.window.document.querySelectorAll(".productDetail")[1]
       .lastElementChild.firstElementChild
   ) {
-    manufacturer = productDataDom.window.document
+    const manufacturerData = productDataDom.window.document
       .querySelectorAll(".productDetail")[1]
       .lastElementChild.firstElementChild.innerHTML.trim();
+
+    if (manufacturerData !== "") manufacturer = manufacturerData;
   }
 
   return {
