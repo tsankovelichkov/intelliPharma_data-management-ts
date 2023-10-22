@@ -41,11 +41,12 @@ const getProductPrices = (productDataDom: any): Prices => {
 export const extractGalenProductInfo = (
   stringHTML: string | undefined
 ): ExtractedProductData | undefined => {
-  if (!stringHTML) return;
-
   const productDataDom: any = new JSDOM(stringHTML);
 
   if (!productDataDom) return;
+
+  if (!productDataDom.window.document.querySelector(".product-price-block"))
+    return;
 
   const priceDOM = new JSDOM(
     productDataDom.window.document

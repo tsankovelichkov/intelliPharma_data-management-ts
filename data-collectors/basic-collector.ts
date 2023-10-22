@@ -12,8 +12,8 @@ import { generalVars, pharmacyVars } from "../variables/variables";
 export const basicCollector = async (
   retailCompany: Pharmacies,
   fetchSitemapData: (
-    url: string
-  ) => Promise<NodeListOf<HTMLElement> | undefined>,
+    url?: string
+  ) => Promise<any[] | NodeListOf<HTMLElement> | undefined>,
   fetchProductData: (
     productLink: string | undefined,
     targetClass: string
@@ -24,9 +24,10 @@ export const basicCollector = async (
 ) => {
   const allProducts = await databaseFindByRetailCompany(retailCompany);
 
-  const sitemap = await fetchSitemapData(
-    pharmacyVars[retailCompany].SITEMAP_URL
-  );
+  const sitemap =
+    retailCompany === "REMEDIUM"
+      ? await fetchSitemapData()
+      : await fetchSitemapData(pharmacyVars[retailCompany].SITEMAP_URL);
 
   if (!sitemap || !allProducts) return;
 

@@ -46,6 +46,10 @@ export const pharmacyVars: PharmacyVars = {
     SITEMAP_URL: "https://galen.bg/media/sitemap_products.xml",
     TARGET_CLASS: ".product-info-main",
   },
+  REMEDIUM: {
+    NAME: "REMEDIUM",
+    TARGET_CLASS: ".Product__ProductInfoContainer-sc-z67flf-4 ",
+  },
 } as PharmacyVars;
 
 export const allowedRetailCompanies = [
@@ -55,4 +59,5 @@ export const allowedRetailCompanies = [
   "AFYA",
   "BENU",
   "GALEN",
+  "REMEDIUM",
 ];

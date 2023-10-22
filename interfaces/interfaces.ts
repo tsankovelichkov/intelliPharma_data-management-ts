@@ -45,7 +45,8 @@ export type Pharmacies =
   | "MEDEA"
   | "AFYA"
   | "BENU"
-  | "GALEN";
+  | "GALEN"
+  | "REMEDIUM";
 
 export interface DefaultVarData {
   NAME: Pharmacies;
@@ -61,6 +62,7 @@ export interface PharmacyVars {
   AFYA: DefaultVarData;
   BENU: DefaultVarData;
   GALEN: DefaultVarData;
+  REMEDIUM: DefaultVarData;
 }
 
 export interface ExistingProductData extends ProductData {

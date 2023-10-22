@@ -74,8 +74,9 @@ export const fetchDefaultProduct = async (
 };
 
 export const fetchDefaultSitemap = async (
-  url: string
+  url?: string
 ): Promise<NodeListOf<HTMLElement> | undefined> => {
+  if (!url) return;
   try {
     const fetchFunc = async () => {
       const sitemap = await fetch(url)
