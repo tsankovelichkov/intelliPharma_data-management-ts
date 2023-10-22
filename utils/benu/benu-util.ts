@@ -46,6 +46,9 @@ export const extractBenuProductInfo = (
 ): ExtractedProductData | undefined => {
   if (!stringHTML) return;
 
+  if (stringHTML.includes("Accu-Chek Instant Тест-ленти за кръвна захар х50"))
+    return;
+
   const productDataDom: any = new JSDOM(stringHTML);
 
   if (!productDataDom) return;
