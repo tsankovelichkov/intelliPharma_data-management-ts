@@ -5,8 +5,10 @@ import { throwError } from "../../utils/general/general-util";
 const { JSDOM } = jsdom;
 
 export const fetchSopharmacySitemapData = async (
-  url: string
-): Promise<NodeListOf<HTMLElement> | undefined> => {
+  url?: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+): Promise<any[] | NodeListOf<HTMLElement> | undefined> => {
+  if (!url) return;
   try {
     const fetchFunc = async () => {
       const sitemapURL = await fetch(url)
