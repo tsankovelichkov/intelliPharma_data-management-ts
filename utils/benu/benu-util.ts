@@ -1,4 +1,8 @@
-import { ExtractedProductData, Prices } from "../../interfaces/interfaces";
+import {
+  ExistingProductData,
+  ExtractedProductData,
+  Prices,
+} from "../../interfaces/interfaces";
 
 import jsdom from "jsdom";
 import { generalVars } from "../../variables/variables";
@@ -42,7 +46,8 @@ const getProductPrices = (productDataDom: any): Prices => {
 };
 
 export const extractBenuProductInfo = (
-  stringHTML: string | undefined
+  stringHTML: string | undefined,
+  existingProductsArr: Array<ExistingProductData>
 ): ExtractedProductData | undefined => {
   if (!stringHTML) return;
 
@@ -51,10 +56,25 @@ export const extractBenuProductInfo = (
 
   const productDataDom: any = new JSDOM(stringHTML);
 
+  const isProductAdded = existingProductsArr.length === 1;
+
+  const buyButton = productDataDom.window.document.querySelector(
+    "button[value='КУПИ']"
+  );
+
+  const isProductAvailable = buyButton && !buyButton.disabled;
+
   if (!productDataDom) return;
 
-  if (!productDataDom.window.document.querySelector(".buy-box__price-head"))
-    return;
+  if (!productDataDom.window.document.querySelector(".buy-box__price-head")) {
+    if (!isProductAdded) return;
+
+    const existingProductData = existingProductsArr[0];
+    return {
+      ...existingProductData,
+      available: false,
+    };
+  }
 
   const productId = generalVars.MISSING_ID;
 
@@ -94,5 +114,6 @@ export const extractBenuProductInfo = (
     regularPrice,
     discountPrice,
     clubCardPrice,
+    available: isProductAvailable ? true : false,
   };
 };

@@ -82,6 +82,12 @@ export const extractSopharmacyProductInfo = (
 
   const productDataDom: any = new JSDOM(stringHTML);
 
+  const buyButton = productDataDom.window.document.querySelector(
+    "#addToCartButton-AddToCart"
+  );
+
+  const isProductAvailable = buyButton && !buyButton.disabled;
+
   const productId = productDataDom.window.document
     .querySelectorAll("small")[1]
     .innerHTML.trim();
@@ -92,7 +98,7 @@ export const extractSopharmacyProductInfo = (
     productDataDom.window.document.querySelector(".product__heading").innerHTML;
 
   const manufacturer = productDataDom.window.document
-    .querySelectorAll(".button__container")[3]
+    .querySelectorAll(".button__container")[4]
     .lastElementChild.innerHTML.replace("Всичкo от ", "")
     .trim();
 
@@ -107,5 +113,6 @@ export const extractSopharmacyProductInfo = (
     regularPrice,
     discountPrice,
     clubCardPrice,
+    available: isProductAvailable ? true : false,
   };
 };

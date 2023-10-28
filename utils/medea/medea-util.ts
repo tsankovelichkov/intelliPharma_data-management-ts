@@ -1,5 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ExtractedProductData, Prices } from "../../interfaces/interfaces";
+import {
+  ExistingProductData,
+  ExtractedProductData,
+  Prices,
+} from "../../interfaces/interfaces";
 import { generalVars } from "../../variables/variables";
 
 import jsdom from "jsdom";
@@ -73,13 +77,24 @@ const getProductManufacturer = (productDataDom: any): string => {
 };
 
 export const extractMedeaProductInfo = (
-  stringHTML: string | undefined
+  stringHTML: string | undefined,
+  existingProductsArr: Array<ExistingProductData>
 ): ExtractedProductData | undefined => {
   if (!stringHTML) return;
 
   const productDataDom: any = new JSDOM(stringHTML);
 
-  if (!productDataDom.window.document.querySelector(".price-box")) return;
+  const isProductAdded = existingProductsArr.length === 1;
+
+  if (!productDataDom.window.document.querySelector(".price-box")) {
+    if (!isProductAdded) return;
+
+    const existingProductData = existingProductsArr[0];
+    return {
+      ...existingProductData,
+      available: false,
+    };
+  }
 
   const productId = productDataDom.window.document
     .querySelector(".sku")
@@ -111,5 +126,6 @@ export const extractMedeaProductInfo = (
     regularPrice,
     discountPrice,
     clubCardPrice,
+    available: true,
   };
 };

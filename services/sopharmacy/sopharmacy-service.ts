@@ -1,6 +1,9 @@
 import { generalVars } from "../../variables/variables";
 import jsdom from "jsdom";
-import { stableConnectionFetch } from "../general/general-service";
+import {
+  nightmareProductFetch,
+  stableConnectionFetch,
+} from "../general/general-service";
 import { throwError } from "../../utils/general/general-util";
 const { JSDOM } = jsdom;
 
@@ -51,4 +54,20 @@ export const fetchSopharmacySitemapData = async (
   } catch (error) {
     throwError("Failed to load sitemap.", error);
   }
+};
+
+export const fetchSopharmacyProductData = async (
+  productLink: string | undefined
+): Promise<string | undefined> => {
+  if (!productLink) return;
+
+  const evaluateFunc = () => {
+    if (!document.querySelector(".product__preview")) return;
+    const htmlEl = document.querySelector(".product__preview") as HTMLElement;
+    return htmlEl.innerHTML;
+  };
+
+  const response = await nightmareProductFetch(productLink, evaluateFunc);
+
+  return response;
 };

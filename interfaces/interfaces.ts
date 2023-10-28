@@ -14,6 +14,7 @@ export interface ProductDataForUpdate {
   regularPrice?: number;
   discountPrice?: number;
   clubCardPrice?: number;
+  available: boolean;
   link?: string;
 }
 
@@ -25,6 +26,7 @@ export interface ExtractedProductData {
   regularPrice: number;
   discountPrice: number;
   clubCardPrice: number;
+  available: boolean;
 }
 
 export interface ProductData {
@@ -36,6 +38,7 @@ export interface ProductData {
   regularPrice: number;
   discountPrice: number;
   clubCardPrice: number;
+  available: boolean;
   link: string;
 }
 

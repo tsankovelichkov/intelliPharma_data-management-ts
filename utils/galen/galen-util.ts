@@ -1,5 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ExtractedProductData, Prices } from "../../interfaces/interfaces";
+import {
+  ExistingProductData,
+  ExtractedProductData,
+  Prices,
+} from "../../interfaces/interfaces";
 
 import jsdom from "jsdom";
 const { JSDOM } = jsdom;
@@ -39,14 +43,30 @@ const getProductPrices = (productDataDom: any): Prices => {
 };
 
 export const extractGalenProductInfo = (
-  stringHTML: string | undefined
+  stringHTML: string | undefined,
+  existingProductsArr: Array<ExistingProductData>
 ): ExtractedProductData | undefined => {
   const productDataDom: any = new JSDOM(stringHTML);
 
+  const isProductAdded = existingProductsArr.length === 1;
+
+  const buyButton = productDataDom.window.document.querySelector(
+    "#product-addtocart-button"
+  );
+
+  const isProductAvailable = buyButton && !buyButton.disabled;
+
   if (!productDataDom) return;
 
-  if (!productDataDom.window.document.querySelector(".product-price-block"))
-    return;
+  if (!productDataDom.window.document.querySelector(".product-price-block")) {
+    if (!isProductAdded) return;
+
+    const existingProductData = existingProductsArr[0];
+    return {
+      ...existingProductData,
+      available: false,
+    };
+  }
 
   const priceDOM = new JSDOM(
     productDataDom.window.document
@@ -54,7 +74,15 @@ export const extractGalenProductInfo = (
       .innerHTML.split(`<div class="price-container">`)[1]
   );
 
-  if (!priceDOM.window.document.querySelector("meta[itemprop='price']")) return;
+  if (!priceDOM.window.document.querySelector("meta[itemprop='price']")) {
+    if (!isProductAdded) return;
+
+    const existingProductData = existingProductsArr[0];
+    return {
+      ...existingProductData,
+      available: false,
+    };
+  }
 
   const productId = productDataDom.window.document
     .querySelector(".text-primary-lighter")
@@ -84,5 +112,6 @@ export const extractGalenProductInfo = (
     regularPrice,
     discountPrice,
     clubCardPrice,
+    available: isProductAvailable ? true : false,
   };
 };

@@ -44,6 +44,11 @@ const pharmacyProductSchema = new mongoose.Schema({
     default: 0,
     required: true,
   },
+  available: {
+    type: Boolean,
+    default: true,
+    required: true,
+  },
 });
 
 export = mongoose.model(

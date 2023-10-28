@@ -1,4 +1,8 @@
-import { ExtractedProductData, Prices } from "../../interfaces/interfaces";
+import {
+  ExistingProductData,
+  ExtractedProductData,
+  Prices,
+} from "../../interfaces/interfaces";
 import { generalVars, pharmacyVars } from "../../variables/variables";
 
 import jsdom from "jsdom";
@@ -37,16 +41,30 @@ const getProductPrices = (productDataDom: any): Prices => {
 };
 
 export const extractAfyaProductInfo = (
-  stringHTML: string | undefined
+  stringHTML: string | undefined,
+  existingProductsArr: Array<ExistingProductData>
 ): ExtractedProductData | undefined => {
   if (!stringHTML) return;
 
   const productDataDom: any = new JSDOM(stringHTML);
+  const isProductAdded = existingProductsArr.length === 1;
+
+  const buyButton =
+    productDataDom.window.document.querySelector("#buttonAddToCart");
+
+  const isProductAvailable = buyButton && !buyButton.disabled;
 
   if (!productDataDom) return;
 
-  if (!productDataDom.window.document.querySelector(".currPrice")) return;
+  if (!productDataDom.window.document.querySelector(".currPrice")) {
+    if (!isProductAdded) return;
 
+    const existingProductData = existingProductsArr[0];
+    return {
+      ...existingProductData,
+      available: false,
+    };
+  }
   const productId = productDataDom.window.document
     .querySelector(".barcode")
     .innerHTML.replace("арт. № ", "")
@@ -88,5 +106,6 @@ export const extractAfyaProductInfo = (
     regularPrice,
     discountPrice,
     clubCardPrice,
+    available: isProductAvailable ? true : false,
   };
 };

@@ -6,12 +6,12 @@ import {
 } from "../../interfaces/interfaces";
 
 export const getDataForUpdate = (
-  existingProductsArr: Array<any>,
+  existingProductsArr: Array<ExistingProductData>,
   newData: ProductData
 ): ProductDataForUpdate | undefined => {
   if (existingProductsArr.length > 1) return;
 
-  const existingProductData = existingProductsArr[0] as ExistingProductData;
+  const existingProductData = existingProductsArr[0];
   const updateData: any = {};
 
   const keysArr = Object.keys(existingProductData._doc);

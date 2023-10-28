@@ -6,13 +6,13 @@ import {
   ProductDataForUpdate,
 } from "../../interfaces/interfaces";
 import { throwError } from "../../utils/general/general-util";
-
+import Nightmare from "nightmare";
 import jsdom from "jsdom";
 import { generalVars } from "../../variables/variables";
 const { JSDOM } = jsdom;
 
 export const stableConnectionFetch = async (
-  fetchFunc: (targetClass?: string, productLink?: string) => Promise<any>,
+  fetchFunc: () => Promise<any>,
   terminationTime: number,
   errorStr: string
 ) => {
@@ -34,6 +34,35 @@ export const stableConnectionFetch = async (
 
       await new Promise((resolve) => setTimeout(resolve, 2000));
     }
+  }
+};
+
+export const nightmareProductFetch = async (
+  productLink: string,
+  evaluateFunc: () => string | undefined
+) => {
+  const nightmare = new Nightmare();
+
+  try {
+    const fetchFunc = async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const fetchExpression: any = await nightmare
+        .goto(productLink)
+        .wait(1500)
+        .evaluate(evaluateFunc);
+
+      return fetchExpression;
+    };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const response = await stableConnectionFetch(
+      fetchFunc,
+      generalVars.STANDARD_TERMINATION_TIME,
+      "Failed to load product data."
+    );
+
+    return response;
+  } catch (error) {
+    throwError("Failed to load product data.", error);
   }
 };
 
@@ -118,14 +147,14 @@ export const addProduct = async (
 };
 
 export const updateProduct = async (
-  existingProductsArr: Array<any>,
+  existingProductsArr: Array<ExistingProductData>,
   dataForUpdate: ProductDataForUpdate | undefined
 ) => {
   if (!dataForUpdate) return;
 
   if (existingProductsArr.length > 1) return;
 
-  const existingProduct = existingProductsArr[0] as ExistingProductData;
+  const existingProduct = existingProductsArr[0];
 
   const productId = existingProduct._id;
 

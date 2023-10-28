@@ -52,6 +52,10 @@ export const extractRemediumProductInfo = (
 
   if (!productDataDom) return;
 
+  const buyButton = productDataDom.window.document.querySelector(".gssovG");
+
+  const isProductAvailable = buyButton && !buyButton.disabled;
+
   const productId = productDataDom.window.document
     .querySelector(".fbJKcE")
     .innerHTML.replace(": <!-- -->", "")
@@ -92,5 +96,6 @@ export const extractRemediumProductInfo = (
     regularPrice,
     discountPrice,
     clubCardPrice,
+    available: isProductAvailable ? true : false,
   };
 };

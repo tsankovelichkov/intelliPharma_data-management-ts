@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { databaseFindByRetailCompany } from "../database/database";
 import {
+  ExistingProductData,
   ExtractedProductData,
   Pharmacies,
   ProductData,
@@ -19,7 +20,8 @@ export const basicCollector = async (
     targetClass: string
   ) => Promise<string | undefined>,
   extractProductInfo: (
-    stringHTML: string | undefined
+    stringHTML: string | undefined,
+    existingProductsArr: Array<ExistingProductData>
   ) => ExtractedProductData | undefined
 ) => {
   const allProducts = await databaseFindByRetailCompany(retailCompany);
@@ -46,7 +48,7 @@ export const basicCollector = async (
       pharmacyVars[retailCompany].TARGET_CLASS
     );
 
-    const extractedData = extractProductInfo(stringHTML);
+    const extractedData = extractProductInfo(stringHTML, existingProductsArr);
 
     if (!extractedData) continue;
 

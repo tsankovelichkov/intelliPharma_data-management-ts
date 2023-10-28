@@ -1,5 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ExtractedProductData, Prices } from "../../interfaces/interfaces";
+import {
+  ExistingProductData,
+  ExtractedProductData,
+  Prices,
+} from "../../interfaces/interfaces";
 
 import jsdom from "jsdom";
 import { generalVars, pharmacyVars } from "../../variables/variables";
@@ -40,17 +44,34 @@ const getProductPrices = (productDataDom: any): Prices => {
 };
 
 export const extractEpharmaProductInfo = (
-  stringHTML: string | undefined
+  stringHTML: string | undefined,
+  existingProductsArr: Array<ExistingProductData>
 ): ExtractedProductData | undefined => {
   if (!stringHTML) return;
 
   const productDataDom: any = new JSDOM(stringHTML);
 
+  const isProductAdded = existingProductsArr.length === 1;
+
+  const buyButton = productDataDom.window.document.querySelector(".button-buy");
+
+  const isProductAvailable = buyButton && !buyButton.disabled;
+
   const isMedicine =
     productDataDom.window.document.querySelector(".is-medicine");
   const newPrice = productDataDom.window.document.querySelector(".new-price");
 
-  if (!isMedicine || !newPrice) return;
+  if (!isMedicine) return;
+
+  if (!newPrice) {
+    if (!isProductAdded) return;
+
+    const existingProductData = existingProductsArr[0];
+    return {
+      ...existingProductData,
+      available: false,
+    };
+  }
 
   let productId = productDataDom.window.document.querySelector(
     ".article-number-content"
@@ -91,5 +112,6 @@ export const extractEpharmaProductInfo = (
     regularPrice,
     discountPrice,
     clubCardPrice,
+    available: isProductAvailable ? true : false,
   };
 };
