@@ -5,6 +5,9 @@ import {
   ProductDataForUpdate,
 } from "../../interfaces/interfaces";
 
+import http from "http";
+import { generalVars } from "../../variables/variables";
+
 export const getDataForUpdate = (
   existingProductsArr: Array<ExistingProductData>,
   newData: ProductData
@@ -28,6 +31,28 @@ export const getDataForUpdate = (
   });
 
   return updateData;
+};
+
+export function delay(time: number) {
+  return new Promise(function (resolve) {
+    setTimeout(resolve, time);
+  });
+}
+
+export const checkInternetConnection = () => {
+  return new Promise((resolve) => {
+    http
+      .get(generalVars.TEST_URL, (res) => {
+        if (res.statusCode === 200) {
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      })
+      .on("error", () => {
+        resolve(false);
+      });
+  });
 };
 
 export const log = (text: string | number | undefined): void => {

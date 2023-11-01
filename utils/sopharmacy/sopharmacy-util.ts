@@ -97,9 +97,17 @@ export const extractSopharmacyProductInfo = (
   const title =
     productDataDom.window.document.querySelector(".product__heading").innerHTML;
 
-  const manufacturer = productDataDom.window.document
-    .querySelectorAll(".button__container")[4]
-    .lastElementChild.innerHTML.replace("Всичкo от ", "")
+  const manufacturerLength =
+    productDataDom.window.document.querySelectorAll(".button__container")
+      .length - 7;
+
+  const manufacturerBase =
+    productDataDom.window.document.querySelectorAll(".button__container");
+
+  const manufacturer = manufacturerBase[
+    manufacturerLength
+  ].lastElementChild.innerHTML
+    .replace("Всичкo от ", "")
     .trim();
 
   const { regularPrice, discountPrice, clubCardPrice } =

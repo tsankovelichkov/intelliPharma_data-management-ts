@@ -1,8 +1,4 @@
-import {
-  ExistingProductData,
-  ExtractedProductData,
-  Prices,
-} from "../../interfaces/interfaces";
+import { ExtractedProductData, Prices } from "../../interfaces/interfaces";
 
 import jsdom from "jsdom";
 import { generalVars } from "../../variables/variables";
@@ -12,6 +8,15 @@ const { JSDOM } = jsdom;
 const getProductPrices = (productDataDom: any): Prices => {
   let regularPrice = 0;
   let discountPrice = 0;
+  const clubCardPrice = 0;
+
+  if (!productDataDom) {
+    return {
+      regularPrice,
+      discountPrice,
+      clubCardPrice,
+    };
+  }
 
   if (
     productDataDom.window.document.querySelector(".buy-box__price-head")
@@ -41,13 +46,12 @@ const getProductPrices = (productDataDom: any): Prices => {
   return {
     regularPrice,
     discountPrice,
-    clubCardPrice: 0,
+    clubCardPrice,
   };
 };
 
 export const extractBenuProductInfo = (
-  stringHTML: string | undefined,
-  existingProductsArr: Array<ExistingProductData>
+  stringHTML: string | undefined
 ): ExtractedProductData | undefined => {
   if (!stringHTML) return;
 
@@ -56,25 +60,17 @@ export const extractBenuProductInfo = (
 
   const productDataDom: any = new JSDOM(stringHTML);
 
-  const isProductAdded = existingProductsArr.length === 1;
-
   const buyButton = productDataDom.window.document.querySelector(
     "button[value='КУПИ']"
   );
 
   const isProductAvailable = buyButton && !buyButton.disabled;
 
+  const priceBox = productDataDom.window.document.querySelector(
+    ".buy-box__price-head"
+  );
+
   if (!productDataDom) return;
-
-  if (!productDataDom.window.document.querySelector(".buy-box__price-head")) {
-    if (!isProductAdded) return;
-
-    const existingProductData = existingProductsArr[0];
-    return {
-      ...existingProductData,
-      available: false,
-    };
-  }
 
   const productId = generalVars.MISSING_ID;
 
@@ -85,12 +81,13 @@ export const extractBenuProductInfo = (
 
   const manufacturer = productDataDom.window.document
     .querySelector(".info-table")
-    .firstElementChild.querySelector("a")
-    .innerHTML.replace("*", "")
+    ?.firstElementChild.querySelector("a")
+    ?.innerHTML.replace("*", "")
     .trim();
 
-  const { regularPrice, discountPrice, clubCardPrice } =
-    getProductPrices(productDataDom);
+  const { regularPrice, discountPrice, clubCardPrice } = getProductPrices(
+    priceBox ? productDataDom : undefined
+  );
 
   if (
     productDataDom.window.document
@@ -110,10 +107,10 @@ export const extractBenuProductInfo = (
     productId,
     image,
     title,
-    manufacturer,
+    manufacturer: priceBox ? manufacturer : generalVars.MISSING_MANUFACTURER,
     regularPrice,
     discountPrice,
     clubCardPrice,
-    available: isProductAvailable ? true : false,
+    available: isProductAvailable && priceBox ? true : false,
   };
 };

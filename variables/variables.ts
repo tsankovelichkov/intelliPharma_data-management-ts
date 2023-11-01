@@ -10,6 +10,7 @@ export const generalVars = {
   COLLECT_DATA_END: "END OF COLLECTING DATA",
   NaN_VALUE: "NaN value",
   STANDARD_TERMINATION_TIME: 900000,
+  TEST_URL: "http://www.google.com",
 };
 
 export const pharmacyVars: PharmacyVars = {

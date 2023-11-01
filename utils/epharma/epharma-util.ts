@@ -1,17 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  ExistingProductData,
-  ExtractedProductData,
-  Prices,
-} from "../../interfaces/interfaces";
+import { ExtractedProductData, Prices } from "../../interfaces/interfaces";
 
 import jsdom from "jsdom";
 import { generalVars, pharmacyVars } from "../../variables/variables";
 const { JSDOM } = jsdom;
 
 const getProductPrices = (productDataDom: any): Prices => {
-  let regularPrice;
-  let discountPrice;
+  let regularPrice = 0;
+  let discountPrice = 0;
+  const clubCardPrice = 0;
+
+  if (!productDataDom) {
+    return {
+      regularPrice,
+      discountPrice,
+      clubCardPrice,
+    };
+  }
 
   if (productDataDom.window.document.querySelector(".old-price")) {
     regularPrice = Number(
@@ -39,19 +44,16 @@ const getProductPrices = (productDataDom: any): Prices => {
   return {
     regularPrice,
     discountPrice,
-    clubCardPrice: 0,
+    clubCardPrice,
   };
 };
 
 export const extractEpharmaProductInfo = (
-  stringHTML: string | undefined,
-  existingProductsArr: Array<ExistingProductData>
+  stringHTML: string | undefined
 ): ExtractedProductData | undefined => {
   if (!stringHTML) return;
 
   const productDataDom: any = new JSDOM(stringHTML);
-
-  const isProductAdded = existingProductsArr.length === 1;
 
   const buyButton = productDataDom.window.document.querySelector(".button-buy");
 
@@ -59,34 +61,26 @@ export const extractEpharmaProductInfo = (
 
   const isMedicine =
     productDataDom.window.document.querySelector(".is-medicine");
-  const newPrice = productDataDom.window.document.querySelector(".new-price");
+
+  const priceBox = productDataDom.window.document.querySelector(".new-price");
 
   if (!isMedicine) return;
 
-  if (!newPrice) {
-    if (!isProductAdded) return;
-
-    const existingProductData = existingProductsArr[0];
-    return {
-      ...existingProductData,
-      available: false,
-    };
-  }
-
   let productId = productDataDom.window.document.querySelector(
     ".article-number-content"
-  ).innerHTML;
+  )?.innerHTML;
 
   let image = generalVars.MISSING_IMAGE;
 
   const title = productDataDom.window.document
     .querySelector(".heading")
-    .innerHTML.trim();
+    ?.innerHTML.trim();
 
   let manufacturer = generalVars.MISSING_MANUFACTURER;
 
-  const { regularPrice, discountPrice, clubCardPrice } =
-    getProductPrices(productDataDom);
+  const { regularPrice, discountPrice, clubCardPrice } = getProductPrices(
+    priceBox ? productDataDom : undefined
+  );
 
   if (!Number(productId)) productId = generalVars.MISSING_ID;
 
@@ -102,16 +96,16 @@ export const extractEpharmaProductInfo = (
   )
     manufacturer =
       productDataDom.window.document.querySelector(".choose-name")
-        .lastElementChild.innerHTML;
+        ?.lastElementChild.innerHTML;
 
   return {
-    productId,
+    productId: priceBox ? productId : generalVars.MISSING_ID,
     image,
     title,
     manufacturer,
     regularPrice,
     discountPrice,
     clubCardPrice,
-    available: isProductAvailable ? true : false,
+    available: isProductAvailable && priceBox ? true : false,
   };
 };

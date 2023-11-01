@@ -1,4 +1,4 @@
-import { nightmareProductFetch } from "../general/general-service";
+import { puppeteerProductFetch } from "../general/general-service";
 
 export const fetchEpharmaProductData = async (
   productLink: string | undefined
@@ -7,11 +7,10 @@ export const fetchEpharmaProductData = async (
 
   const evaluateFunc = () => {
     if (!document.querySelector(".jq-product-details")) return;
-    const htmlEl = document.querySelector(".jq-product-details") as HTMLElement;
-    return htmlEl.innerHTML;
+    return document.querySelector(".jq-product-details")?.innerHTML;
   };
 
-  const response = await nightmareProductFetch(productLink, evaluateFunc);
+  const response = await puppeteerProductFetch(productLink, evaluateFunc, 500);
 
   return response;
 };

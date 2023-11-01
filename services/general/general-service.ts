@@ -1,13 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import puppeteer from "puppeteer";
+import jsdom from "jsdom";
 import { databaseInsert, databaseUpdate } from "../../database/database";
 import {
   ExistingProductData,
   ProductData,
   ProductDataForUpdate,
 } from "../../interfaces/interfaces";
-import { throwError } from "../../utils/general/general-util";
-import Nightmare from "nightmare";
-import jsdom from "jsdom";
+import {
+  checkInternetConnection,
+  delay,
+  throwError,
+} from "../../utils/general/general-util";
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 import { generalVars } from "../../variables/variables";
 const { JSDOM } = jsdom;
 
@@ -21,6 +26,10 @@ export const stableConnectionFetch = async (
   // eslint-disable-next-line no-constant-condition
   while (true) {
     try {
+      const isOnline = await checkInternetConnection();
+
+      if (!isOnline) throw new Error();
+
       const response = await fetchFunc();
 
       return response;
@@ -28,7 +37,6 @@ export const stableConnectionFetch = async (
       const timeAtTheMoment = new Date().getTime();
 
       //TO-DO: if statement for LAN error
-
       if (timeAtTheMoment - enterenceTime > terminationTime)
         throwError(errorStr, error);
 
@@ -37,21 +45,26 @@ export const stableConnectionFetch = async (
   }
 };
 
-export const nightmareProductFetch = async (
+export const puppeteerProductFetch = async (
   productLink: string,
-  evaluateFunc: () => string | undefined
+  evaluateFunc: () => string | undefined,
+  delayTime: number
 ) => {
-  const nightmare = new Nightmare();
-
   try {
     const fetchFunc = async () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const fetchExpression: any = await nightmare
-        .goto(productLink)
-        .wait(1500)
-        .evaluate(evaluateFunc);
+      const browser = await puppeteer.launch();
+      const page = await browser.newPage();
 
-      return fetchExpression;
+      await page.goto(productLink);
+
+      await delay(delayTime);
+
+      const htmlString = await page?.evaluate(evaluateFunc);
+
+      browser.close();
+
+      return htmlString;
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const response = await stableConnectionFetch(

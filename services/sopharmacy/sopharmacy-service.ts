@@ -1,7 +1,7 @@
 import { generalVars } from "../../variables/variables";
 import jsdom from "jsdom";
 import {
-  nightmareProductFetch,
+  puppeteerProductFetch,
   stableConnectionFetch,
 } from "../general/general-service";
 import { throwError } from "../../utils/general/general-util";
@@ -63,11 +63,11 @@ export const fetchSopharmacyProductData = async (
 
   const evaluateFunc = () => {
     if (!document.querySelector(".product__preview")) return;
-    const htmlEl = document.querySelector(".product__preview") as HTMLElement;
-    return htmlEl.innerHTML;
+
+    return document.querySelector(".product__preview")?.innerHTML;
   };
 
-  const response = await nightmareProductFetch(productLink, evaluateFunc);
+  const response = await puppeteerProductFetch(productLink, evaluateFunc, 3500);
 
   return response;
 };
