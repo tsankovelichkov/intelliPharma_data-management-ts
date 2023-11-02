@@ -7,11 +7,7 @@ import {
   ProductData,
   ProductDataForUpdate,
 } from "../../interfaces/interfaces";
-import {
-  checkInternetConnection,
-  delay,
-  throwError,
-} from "../../utils/general/general-util";
+import { delay, throwError } from "../../utils/general/general-util";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 import { generalVars } from "../../variables/variables";
 const { JSDOM } = jsdom;
@@ -26,10 +22,6 @@ export const stableConnectionFetch = async (
   // eslint-disable-next-line no-constant-condition
   while (true) {
     try {
-      const isOnline = await checkInternetConnection();
-
-      if (!isOnline) throw new Error();
-
       const response = await fetchFunc();
 
       return response;
