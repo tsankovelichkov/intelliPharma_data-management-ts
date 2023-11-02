@@ -49,23 +49,27 @@ const getProductPrices = (productDataDom: any): Prices => {
 };
 
 const priceBoxExisted = (productDataDom: any) => {
-  const priceDOM = new JSDOM(
-    productDataDom.window.document
-      .querySelector(".product-price-block")
-      .innerHTML.split(`<div class="price-container">`)[1]
-  );
-
   const firstPriceBox = productDataDom.window.document.querySelector(
     ".product-price-block"
   )
     ? true
     : false;
 
-  const secondPriceBox = priceDOM.window.document.querySelector(
-    "meta[itemprop='price']"
-  )
-    ? true
-    : false;
+  let secondPriceBox = false;
+
+  if (firstPriceBox) {
+    const priceDOM = new JSDOM(
+      productDataDom.window.document
+        .querySelector(".product-price-block")
+        ?.innerHTML.split(`<div class="price-container">`)[1]
+    );
+
+    secondPriceBox = priceDOM.window.document.querySelector(
+      "meta[itemprop='price']"
+    )
+      ? true
+      : false;
+  }
 
   return firstPriceBox && secondPriceBox;
 };
@@ -80,7 +84,7 @@ export const extractGalenProductInfo = (
   const priceDOM = new JSDOM(
     productDataDom.window.document
       .querySelector(".product-price-block")
-      .innerHTML.split(`<div class="price-container">`)[1]
+      ?.innerHTML.split(`<div class="price-container">`)[1]
   );
 
   const buyButton = productDataDom.window.document.querySelector(
@@ -105,8 +109,8 @@ export const extractGalenProductInfo = (
     ?.innerHTML.trim();
 
   const manufacturer = productDataDom.window.document
-    ?.querySelector(".product-attribute-value")
-    .innerHTML.trim();
+    .querySelector(".product-attribute-value")
+    ?.innerHTML.trim();
 
   const { regularPrice, discountPrice, clubCardPrice } = getProductPrices(
     priceBox ? priceDOM : undefined
