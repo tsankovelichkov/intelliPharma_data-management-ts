@@ -95,15 +95,11 @@ export const extractSopharmacyProductInfo = (
   const title =
     productDataDom.window.document.querySelector(".product__heading").innerHTML;
 
-  const manufacturerLength =
-    productDataDom.window.document.querySelectorAll(".button__container")
-      .length - 7;
-
   const manufacturerBase =
     productDataDom.window.document.querySelectorAll(".button__container");
 
   const manufacturer = manufacturerBase[
-    manufacturerLength
+    isProductAvailable ? 4 : 3
   ].lastElementChild.innerHTML
     .replace("Всичкo от ", "")
     .trim();
