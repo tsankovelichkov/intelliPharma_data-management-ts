@@ -62,10 +62,9 @@ export const fetchSopharmacyProductData = async (
   if (!productLink) return;
 
   const evaluateFunc = () => {
-    if (!document.querySelector(pharmacyVars.SOPHARMACY.TARGET_CLASS)) return;
+    if (!document.querySelector(".product__preview")) return;
 
-    return document.querySelector(pharmacyVars.SOPHARMACY.TARGET_CLASS)
-      ?.innerHTML;
+    return document.querySelector(".product__preview")?.innerHTML;
   };
 
   const response = await puppeteerProductFetch(

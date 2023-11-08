@@ -7,8 +7,8 @@ export const fetchEpharmaProductData = async (
   if (!productLink || !productLink.includes("-1-")) return;
 
   const evaluateFunc = () => {
-    if (!document.querySelector(pharmacyVars.EPHARMA.TARGET_CLASS)) return;
-    return document.querySelector(pharmacyVars.EPHARMA.TARGET_CLASS)?.innerHTML;
+    if (!document.querySelector(".jq-product-details")) return;
+    return document.querySelector(".jq-product-details")?.innerHTML;
   };
 
   const response = await puppeteerProductFetch(
