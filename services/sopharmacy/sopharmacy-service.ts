@@ -1,4 +1,4 @@
-import { generalVars } from "../../variables/variables";
+import { generalVars, pharmacyVars } from "../../variables/variables";
 import jsdom from "jsdom";
 import {
   puppeteerProductFetch,
@@ -62,12 +62,17 @@ export const fetchSopharmacyProductData = async (
   if (!productLink) return;
 
   const evaluateFunc = () => {
-    if (!document.querySelector(".product__preview")) return;
+    if (!document.querySelector(pharmacyVars.SOPHARMACY.TARGET_CLASS)) return;
 
-    return document.querySelector(".product__preview")?.innerHTML;
+    return document.querySelector(pharmacyVars.SOPHARMACY.TARGET_CLASS)
+      ?.innerHTML;
   };
 
-  const response = await puppeteerProductFetch(productLink, evaluateFunc, 3500);
+  const response = await puppeteerProductFetch(
+    productLink,
+    evaluateFunc,
+    pharmacyVars.SOPHARMACY.ADD_TO_CART_BUTTON_SELECTOR
+  );
 
   return response;
 };

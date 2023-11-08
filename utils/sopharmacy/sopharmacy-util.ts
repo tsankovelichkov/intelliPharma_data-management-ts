@@ -80,13 +80,11 @@ export const extractSopharmacyProductInfo = (
 ): ExtractedProductData | undefined => {
   if (!stringHTML) return;
 
-  const productDataDom: any = new JSDOM(stringHTML);
-
-  const buyButton = productDataDom.window.document.querySelector(
-    "#addToCartButton-AddToCart"
+  const isProductAvailable = !stringHTML.includes(
+    generalVars.MISSING_ADD_TO_CART_BUTTON
   );
 
-  const isProductAvailable = buyButton && !buyButton.disabled;
+  const productDataDom: any = new JSDOM(stringHTML);
 
   const productId = productDataDom.window.document
     .querySelectorAll("small")[1]

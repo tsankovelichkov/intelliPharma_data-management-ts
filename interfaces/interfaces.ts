@@ -56,6 +56,7 @@ export interface DefaultVarData {
   SITEMAP_URL: string;
   TARGET_CLASS: string;
   ROOT_URL?: string;
+  ADD_TO_CART_BUTTON_SELECTOR?: string;
 }
 
 export interface PharmacyVars {

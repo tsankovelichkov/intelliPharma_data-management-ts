@@ -11,6 +11,8 @@ export const generalVars = {
   NaN_VALUE: "NaN value",
   STANDARD_TERMINATION_TIME: 1800000,
   TEST_URL: "http://www.google.com",
+  MISSING_ADD_TO_CART_BUTTON:
+    "addToCartButtonIsMissingIntelliPharmaUniqueString-(+w7r7b[96&$?.1hJ%cQPdU37Fh#NyurHGZ4u%kYMCpnjLww0+)+Y]RHTaE!F=true",
 };
 
 export const pharmacyVars: PharmacyVars = {
@@ -19,6 +21,7 @@ export const pharmacyVars: PharmacyVars = {
     SITEMAP_URL: "https://sopharmacy.bg/sitemap.xml",
     ROOT_URL: "https://sopharmacy.bg/",
     TARGET_CLASS: ".product__preview",
+    ADD_TO_CART_BUTTON_SELECTOR: "#addToCartButton-AddToCart",
   },
   MEDEA: {
     NAME: "MEDEA",
@@ -30,6 +33,7 @@ export const pharmacyVars: PharmacyVars = {
     SITEMAP_URL: "https://epharma.bg/sitemap.xml",
     ROOT_URL: "https://epharma.bg",
     TARGET_CLASS: ".jq-product-details",
+    ADD_TO_CART_BUTTON_SELECTOR: ".button-buy",
   },
   AFYA: {
     NAME: "AFYA",

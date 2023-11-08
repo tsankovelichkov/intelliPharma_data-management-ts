@@ -7,7 +7,7 @@ import {
   ProductData,
   ProductDataForUpdate,
 } from "../../interfaces/interfaces";
-import { delay, throwError } from "../../utils/general/general-util";
+import { throwError } from "../../utils/general/general-util";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 import { generalVars } from "../../variables/variables";
 const { JSDOM } = jsdom;
@@ -40,8 +40,10 @@ export const stableConnectionFetch = async (
 export const puppeteerProductFetch = async (
   productLink: string,
   evaluateFunc: () => string | undefined,
-  delayTime: number
+  targetSelector: string | undefined
 ) => {
+  if (!targetSelector) return;
+
   try {
     const fetchFunc = async () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -50,13 +52,25 @@ export const puppeteerProductFetch = async (
 
       await page.goto(productLink);
 
-      await delay(delayTime);
+      try {
+        await page.waitForSelector(targetSelector);
 
-      const htmlString = await page?.evaluate(evaluateFunc);
+        const htmlString = await page?.evaluate(evaluateFunc);
 
-      browser.close();
+        browser.close();
 
-      return htmlString;
+        return htmlString;
+      } catch (error: any) {
+        if (error.message.includes("Waiting for selector")) {
+          await page.goto(productLink);
+
+          const htmlString = await page?.evaluate(evaluateFunc);
+
+          browser.close();
+
+          return htmlString + generalVars.MISSING_ADD_TO_CART_BUTTON;
+        }
+      }
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const response = await stableConnectionFetch(

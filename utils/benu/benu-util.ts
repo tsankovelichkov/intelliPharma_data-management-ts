@@ -92,15 +92,15 @@ export const extractBenuProductInfo = (
   if (
     productDataDom.window.document
       .querySelector(".js-pdbox")
-      .getAttribute("href") &&
+      ?.getAttribute("href") &&
     productDataDom.window.document
       .querySelector(".js-pdbox")
-      .getAttribute("href")
+      ?.getAttribute("href")
       .includes(".jpg")
   ) {
     image = productDataDom.window.document
       .querySelector(".js-pdbox")
-      .getAttribute("href");
+      ?.getAttribute("href");
   }
 
   return {
