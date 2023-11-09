@@ -67,7 +67,7 @@ const getProductImage = (productDataDom: any): string => {
       pharmacyVars.SOPHARMACY.ROOT_URL +
       productDataDom.window.document
         .querySelector(".product__img")
-        .getAttribute("data-srcset");
+        ?.getAttribute("data-srcset");
   } else {
     image = generalVars.MISSING_IMAGE;
   }
@@ -88,7 +88,7 @@ export const extractSopharmacyProductInfo = (
 
   const productId = productDataDom.window.document
     .querySelectorAll("small")[1]
-    .innerHTML.trim();
+    ?.innerHTML.trim();
 
   const image = getProductImage(productDataDom);
 
@@ -100,7 +100,7 @@ export const extractSopharmacyProductInfo = (
 
   const manufacturer = manufacturerBase[
     isProductAvailable ? 4 : 3
-  ].lastElementChild.innerHTML
+  ].lastElementChild?.innerHTML
     .replace("Всичкo от ", "")
     .trim();
 
@@ -108,10 +108,12 @@ export const extractSopharmacyProductInfo = (
     getProductPrices(productDataDom);
 
   return {
-    productId,
-    image,
+    productId: productId ? productId : generalVars.MISSING_ID,
+    image: image ? image : generalVars.MISSING_IMAGE,
     title,
-    manufacturer,
+    manufacturer: manufacturer
+      ? manufacturer
+      : generalVars.MISSING_MANUFACTURER,
     regularPrice,
     discountPrice,
     clubCardPrice,
