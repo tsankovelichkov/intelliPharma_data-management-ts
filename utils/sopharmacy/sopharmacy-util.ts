@@ -93,7 +93,9 @@ export const extractSopharmacyProductInfo = (
   const image = getProductImage(productDataDom);
 
   const title =
-    productDataDom.window.document.querySelector(".product__heading").innerHTML;
+    productDataDom.window.document.querySelector(
+      ".product__heading"
+    )?.innerHTML;
 
   const manufacturerBase =
     productDataDom.window.document.querySelectorAll(".button__container");
@@ -106,6 +108,8 @@ export const extractSopharmacyProductInfo = (
 
   const { regularPrice, discountPrice, clubCardPrice } =
     getProductPrices(productDataDom);
+
+  if (!title) return;
 
   return {
     productId: productId ? productId : generalVars.MISSING_ID,
