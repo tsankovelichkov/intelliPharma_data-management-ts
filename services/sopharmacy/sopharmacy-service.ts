@@ -61,11 +61,7 @@ export const fetchSopharmacyProductData = async (
 ): Promise<string | undefined> => {
   if (!productLink) return;
 
-  const evaluateFunc = () => {
-    if (!document.querySelector(".product__preview")) return;
-
-    return document.querySelector(".product__preview")?.innerHTML;
-  };
+  const evaluateFunc = () => document.querySelector(".main-content")?.innerHTML;
 
   const response = await puppeteerProductFetch(
     productLink,
