@@ -102,7 +102,7 @@ export const extractSopharmacyProductInfo = (
 
   const manufacturer = manufacturerBase[
     isProductAvailable ? 4 : 3
-  ].lastElementChild?.innerHTML
+  ]?.lastElementChild?.innerHTML
     .replace("Всичкo от ", "")
     .trim();
 
