@@ -86,9 +86,6 @@ export const extractSopharmacyProductInfo = (
 
   const productDataDom: any = new JSDOM(stringHTML);
 
-  if (!productDataDom.window.document.querySelector(".product__preview"))
-    return;
-
   const productId = productDataDom.window.document
     .querySelectorAll("small")[1]
     ?.innerHTML.trim();
@@ -104,7 +101,7 @@ export const extractSopharmacyProductInfo = (
     productDataDom.window.document.querySelectorAll(".button__container");
 
   const manufacturer = manufacturerBase[
-    isProductAvailable ? 4 : 3
+    isProductAvailable ? 3 : 4
   ]?.lastElementChild?.innerHTML
     .replace("Всичкo от ", "")
     .trim();
