@@ -35,7 +35,10 @@ export const basicCollector = async (
 
   for (let index = 0; index < sitemap.length; index++) {
     log(index);
-    const productLink = sitemap[index].innerHTML;
+    const productLink = sitemap[index].innerHTML.replace(
+      "10.4.8.56",
+      "sopharmacy.bg"
+    );
 
     const existingProductsArr = allProducts.filter(
       (product) => product.link === productLink

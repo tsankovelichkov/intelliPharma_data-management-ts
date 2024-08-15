@@ -59,7 +59,7 @@ export const extractAfyaProductInfo = (
 
   const priceBox = productDataDom.window.document.querySelector(".currPrice");
 
-  if (!productDataDom) return;
+  if (!productDataDom || !priceBox) return;
 
   const productId = productDataDom.window.document
     .querySelector(".barcode")
